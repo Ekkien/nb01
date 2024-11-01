@@ -2,8 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bibliothèque PDF - nb01</title>
+    <title>Bibliothèque PDF</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,47 +13,51 @@
         .pdf-viewer {
             width: 80%;
             margin: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
         }
         canvas {
             display: block;
-            margin: 0 auto;
+            margin: 20px auto;
         }
     </style>
 </head>
 <body>
     <div class="pdf-viewer" id="pdfViewer"></div>
     
-    <!-- Charger PDF.js depuis un CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
     <script>
-        // Liste des fichiers PDF (chemins relatifs dans le dossier "livres")
+        // Liste des PDF
         const pdfList = [
-            'livres/fichier1.pdf',
-            'livres/fichier2.pdf',
-            // Ajoutez plus de fichiers PDF ici
+            'livres/Abattre l’ennemi (Juan Branco) (Z-Library).pdf',
+            'livres/Capital et Idéologie (Thomas Piketty) (Z-Library).pdf',
+            'livres/Carnets de guerre Covid-19 (Didier Raoult) (Z-Library).pdf',
+            'livres/Conflits et pouvoirs dans les institutions du capitalisme (Frédéric Lordon) (Z-Library).pdf',
+            'livres/Coup détat (French Edition) (Juan Branco) (Z-Library).pdf',
+            'livres/Crépuscule (édition papier) (Juan Branco) (Z-Library).pdf',
+            'livres/Économie du bien commun (Jean Tirole) (Z-Library).pdf',
+            'livres/Juan Branco (Macron et son crépuscule) (Z-Library).pdf',
+            'livres/La République ne vous appartient pas (Branco, Juan) (Z-Library).pdf',
+            'livres/Le monde change et on ny comprend rien (Julien Devaureix) (Z-Library).pdf',
+            'livres/Le Pouvoir rhétorique (ClémentViktorovitch) (Z-Library).pdf',
+            'livres/Le Prix de l’inégalité (Joseph E. Stiglitz) (Z-Library).pdf',
+            'livres/Lordre et le monde (Juan Branco) (Z-Library).pdf',
+            'livres/Prosperity Without Growth (Tim Jackson) (Z-Library).pdf',
+            'livres/Treize pillards (Juan Branco) (Z-Library).pdf',
+            'livres/Utopies réalistes (Rutger Bregman) (Z-Library).pdf'
         ];
 
         const viewer = document.getElementById('pdfViewer');
-
-        // Fonction pour charger chaque PDF avec gestion d'erreur
+        
         async function loadPDF(url) {
-            try {
-                const pdf = await pdfjsLib.getDocument(url).promise;
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const viewport = page.getViewport({ scale: 1 });
-                    const canvas = document.createElement('canvas');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-                    viewer.appendChild(canvas);
-                    const context = canvas.getContext('2d');
-                    await page.render({ canvasContext: context, viewport: viewport }).promise;
-                }
-            } catch (error) {
-                console.error(`Erreur lors du chargement du PDF: ${url}`, error);
+            const pdf = await pdfjsLib.getDocument(url).promise;
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 1 });
+                const canvas = document.createElement('canvas');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                viewer.appendChild(canvas);
+                const context = canvas.getContext('2d');
+                await page.render({ canvasContext: context, viewport: viewport }).promise;
             }
         }
 
